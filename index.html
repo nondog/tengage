@@ -1,335 +1,49 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#173b2a">
-<title>TEN GAGE · Tennis Player Assessment</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TEN GAGE Beta · NTRP 평가</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
 <style>
-:root{--deep:#173b2a;--deep2:#0f2b1f;--lime:#b8ef2d;--ink:#142019;--muted:#6b766f;--bg:#eef3f0;--card:#fff;--line:#dbe4de;--danger:#b42318}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-button,input,select,textarea{font:inherit}.hidden{display:none!important}
-.shell{max-width:1080px;margin:auto;min-height:100vh;background:#f8faf9}
-.topbar{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
-.brand{font-weight:950}.brand span{color:var(--lime)}.save-indicator{font-size:12px;color:#d8e4dc}
-.hero{background:linear-gradient(135deg,var(--deep),var(--deep2));color:#fff;padding:32px 18px}
-.hero small{color:var(--lime);font-weight:900;letter-spacing:.12em}.hero h1{font-size:40px;line-height:.95;margin:10px 0;letter-spacing:-.06em}.hero p{color:#d8e4dc;margin:0}
-.tabs{display:flex;gap:7px;overflow:auto;padding:11px 12px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:49px;z-index:19}
-.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;white-space:nowrap;font-size:13px;font-weight:800}
-.tab.active{background:var(--deep);color:#fff;border-color:var(--deep)}
-main{padding:14px}.panel{display:none}.panel.active{display:block}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.03)}
-.card h2,.card h3{margin:0 0 12px;letter-spacing:-.03em}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field{display:block;font-size:12px;color:var(--muted);font-weight:800}.field input,.field select,.field textarea{width:100%;margin-top:6px;border:1px solid #cbd7cf;border-radius:11px;padding:12px;background:#fff}
-.field textarea{min-height:84px;resize:vertical}
-.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:900;background:var(--deep);color:#fff}.btn.lime{background:var(--lime);color:var(--deep)}.btn.ghost{background:#fff;color:var(--deep);border:1px solid var(--line)}.btn.danger{background:#fff1f0;color:var(--danger);border:1px solid #f1c5c1}
-.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
-.notice{background:#f1f6f3;border-left:4px solid var(--lime);padding:12px;font-size:12px;border-radius:8px;margin-bottom:12px}
-.level-card{border-top:2px solid var(--deep);padding:16px 0}.level-head{display:flex;gap:12px;align-items:center}.level-badge{width:54px;height:54px;border-radius:50%;background:var(--deep);color:var(--lime);display:grid;place-items:center;font-weight:950}
-.level-head b{display:block}.level-head span{font-size:12px;color:var(--muted)}
-.checklist{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;margin-top:11px}.check{display:flex;gap:8px;align-items:flex-start;background:#f7f9f8;border-radius:9px;padding:8px;font-size:13px}.check input{margin-top:2px;transform:scale(1.15)}
-.level-score{text-align:right;font-size:12px;color:var(--muted);margin-top:7px}
-.gage-card{border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}.gage-head{display:flex;justify-content:space-between;gap:12px}.gage-head h3{margin:0}.gage-head small{display:block;color:var(--muted);margin-top:3px}.score-number{font-size:28px;font-weight:950}
-.range{width:100%;accent-color:var(--deep);margin:14px 0 5px}.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
-.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{background:var(--deep);color:#fff;border-radius:14px;padding:14px}.metric small{color:#bcd0c4}.metric b{display:block;color:var(--lime);font-size:24px;margin-top:4px}
-.summary-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary-item{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;justify-content:space-between}
-.chartwrap{max-width:640px;margin:auto}.history-item{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}.history-item .meta{font-size:11px;color:var(--muted);margin:5px 0 10px}.history-actions{display:flex;gap:7px;flex-wrap:wrap}
-.searchbox{display:flex;gap:8px}.searchbox input{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px}
-.footer{padding:22px 15px 70px;text-align:center;font-size:11px;color:var(--muted)}
-dialog{border:0;border-radius:18px;padding:0;width:calc(100% - 24px);max-width:680px}.dialog-body{padding:20px;max-height:80vh;overflow:auto}dialog::backdrop{background:rgba(0,0,0,.5)}
-@media(max-width:760px){.grid2,.checklist,.summary-list{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}.hero h1{font-size:35px}}
-@media print{.topbar,.tabs,.btnrow,.footer{display:none!important}.panel{display:none!important}#summaryPanel{display:block!important}body,.shell{background:#fff}.card{box-shadow:none}}
-</style>
-</head>
-<body>
-<div class="shell">
-<header class="topbar"><div class="brand">TEN <span>GAGE</span></div><div class="save-indicator" id="saveIndicator">자동 저장 준비</div></header>
-<section class="hero"><small>TENNIS PLAYER ASSESSMENT</small><h1>NTRP &<br>TEN GAGE</h1><p>회원가입 없이 이름을 입력하고 평가를 저장하는 모바일 웹앱</p></section>
-<nav class="tabs">
-<button class="tab active" data-panel="profilePanel">선수정보</button>
-<button class="tab" data-panel="ntrpPanel">NTRP</button>
-<button class="tab" data-panel="gagePanel">TEN GAGE</button>
-<button class="tab" data-panel="summaryPanel">종합결과</button>
-<button class="tab" data-panel="historyPanel">선수기록</button>
-</nav>
+:root{--d:#173b2a;--l:#b8ef2d;--bg:#eef3ef;--c:#fff;--t:#152019;--m:#6a756e;--line:#d7e1da}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+header{background:linear-gradient(135deg,var(--d),#0b281a);color:#fff;padding:35px 18px}header small{color:var(--l);font-weight:900;letter-spacing:.15em}header h1{font-size:42px;line-height:.95;margin:10px 0}header p{max-width:760px;color:#dbe6df}
+.beta{display:inline-block;background:var(--l);color:var(--d);padding:6px 9px;border-radius:99px;font-weight:900;font-size:11px}
+nav{position:sticky;top:0;z-index:20;background:#fff;padding:10px;display:flex;gap:7px;overflow:auto;border-bottom:1px solid var(--line)}
+nav button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:9px 12px;white-space:nowrap;font-weight:800}nav button.active{background:var(--d);color:#fff}
+main{max-width:1100px;margin:auto;padding:14px}.panel{display:none}.panel.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{font-size:12px;font-weight:800;color:var(--m)}.field input,.field textarea{width:100%;margin-top:6px;padding:11px;border:1px solid var(--line);border-radius:10px}.field textarea{min-height:80px}
+.level{border-top:2px solid var(--d);padding:18px 0}.lh{display:flex;gap:11px;align-items:center}.badge{width:52px;height:52px;border-radius:50%;background:var(--d);color:var(--l);display:grid;place-items:center;font-weight:950}.lh span{color:var(--m);font-size:12px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:7px 15px;margin-top:11px}.check{display:flex;gap:8px;align-items:flex-start;padding:8px;background:#f6f9f7;border-radius:9px;font-size:13px}.check input{margin-top:2px}.count{text-align:right;color:var(--m);font-size:12px;margin-top:8px}
+.gage{border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:12px}.gh{display:flex;justify-content:space-between}.gh h3{margin:0}.gh small{color:var(--m)}.score{font-size:28px;font-weight:950}.range{width:100%;accent-color:var(--d);margin-top:14px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:var(--d);color:#fff;padding:14px;border-radius:14px}.metric small{color:#bfd0c5}.metric b{display:block;color:var(--l);font-size:25px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.item{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:9px}
+.btn{border:0;border-radius:11px;padding:11px 14px;background:var(--d);color:#fff;font-weight:900}.btn.alt{background:#fff;color:var(--d);border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.notice{background:#fff6df;border-left:4px solid var(--l);padding:12px;font-size:12px;margin-bottom:14px}.chart{max-width:620px;margin:auto}
+@media(max-width:720px){.grid,.checks,.summary{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}header h1{font-size:36px}}
+@media print{nav,.actions{display:none!important}.panel{display:none!important}#result{display:block!important}body{background:#fff}.card{border-color:#bbb}}
+</style></head><body>
+<header><span class="beta">BETA 1.0 · 저장 기능 없음</span><small>TENNIS PLAYER ASSESSMENT</small><h1>NTRP &<br>TEN GAGE</h1><p>최종 다문항 평가 내용을 반영한 초기 베타버전입니다. 페이지를 닫거나 새로고침하면 입력 내용이 사라집니다.</p></header>
+<nav><button class="active" data-p="player">선수정보</button><button data-p="ntrp">NTRP</button><button data-p="gage">TEN GAGE</button><button data-p="result">종합결과</button></nav>
 <main>
-<section id="profilePanel" class="panel active">
-<div class="notice"><b>저장 방식:</b> 입력 데이터는 현재 휴대폰의 Chrome 또는 Safari 안에 저장됩니다. 같은 브라우저에서 다시 열면 그대로 남습니다.</div>
-<div class="card"><h2>선수 기본정보</h2>
-<div class="grid2">
-<label class="field">선수 이름<input id="playerName" placeholder="예: 김민수"></label>
-<label class="field">평가일<input id="assessmentDate" type="date"></label>
-<label class="field">평가자<input id="evaluatorName" placeholder="본인 또는 코치"></label>
-<label class="field">주 사용 손<select id="handedness"><option value="">선택</option><option>오른손</option><option>왼손</option><option>양손</option></select></label>
-<label class="field">출생연도<input id="birthYear" type="number" min="1920" max="2026"></label>
-<label class="field">테니스 경력(년)<input id="experienceYears" type="number" min="0" max="80" step="0.5"></label>
-</div>
-<div class="btnrow"><button class="btn" id="saveProfileBtn">선수정보 저장</button><button class="btn ghost" id="newAssessmentBtn">새 평가 시작</button></div>
-</div>
-</section>
-
-<section id="ntrpPanel" class="panel"><div class="card"><h2>NTRP 다문항 진단</h2><div id="ntrpContainer"></div></div></section>
-<section id="gagePanel" class="panel"><div class="card"><h2>TEN GAGE 10개 항목</h2><div id="gageContainer"></div></div></section>
-
-<section id="summaryPanel" class="panel">
-<div class="metric-grid">
-<div class="metric"><small>NTRP 추천</small><b id="summaryNtrp">-</b></div>
-<div class="metric"><small>총점</small><b id="summaryTotal">50</b></div>
-<div class="metric"><small>평균</small><b id="summaryAverage">5.0</b></div>
-<div class="metric"><small>상태</small><b id="summarySaveState">미저장</b></div>
-</div>
-<div class="card" style="margin-top:14px"><h2>10각형 플레이어 프로필</h2><div class="chartwrap"><canvas id="radarChart"></canvas></div></div>
-<div class="grid2">
-<div class="card"><h3>항목별 점수</h3><div class="summary-list" id="scoreSummary"></div></div>
-<div class="card"><h3>자동 분석</h3>
-<label class="field">강점<textarea id="strengths"></textarea></label>
-<label class="field" style="margin-top:10px">훈련 우선순위<textarea id="priorities"></textarea></label>
-<label class="field" style="margin-top:10px">코치 코멘트<textarea id="coachComment"></textarea></label>
-</div></div>
-<div class="card"><div class="btnrow"><button class="btn lime" id="saveAssessmentBtn">평가 저장</button><button class="btn ghost" onclick="window.print()">PDF·인쇄</button></div></div>
-</section>
-
-<section id="historyPanel" class="panel"><div class="card"><h2>선수별 평가 기록</h2>
-<div class="searchbox"><input id="historySearch" placeholder="선수 이름 검색"><button class="btn ghost" id="exportBtn">백업 내보내기</button></div>
-<div id="historyList" style="margin-top:14px"></div>
-</div></section>
+<section id="player" class="panel active"><div class="card"><h2>선수정보</h2><div class="grid">
+<label class="field">이름<input id="name"></label><label class="field">휴대폰 번호<input id="phone" inputmode="tel"></label>
+<label class="field">평가일<input id="date" type="date"></label><label class="field">평가자<input id="evaluator"></label>
+<label class="field">성별<input id="gender"></label><label class="field">나이<input id="age" type="number"></label>
+<label class="field">테니스 경력<input id="career" placeholder="예: 3년 6개월"></label></div></div></section>
+<section id="ntrp" class="panel"><div class="card"><h2>NTRP 다문항 진단</h2><div class="notice">한 번 성공한 샷이 아니라 실제 경기에서 반복 가능한 수준만 체크하세요. 추천 등급은 각 단계 문항의 65% 이상을 충족한 가장 높은 단계입니다.</div><div id="ntrpList"></div></div></section>
+<section id="gage" class="panel"><div class="card"><h2>TEN GAGE 10개 역량</h2><div class="notice">각 항목의 8개 질문을 확인한 뒤 실전 재현성을 기준으로 1~10점을 선택하세요.</div><div id="gageList"></div></div></section>
+<section id="result" class="panel"><div class="metrics"><div class="metric"><small>NTRP 추천</small><b id="rn">-</b></div><div class="metric"><small>TEN GAGE 총점</small><b id="rt">50</b></div><div class="metric"><small>평균</small><b id="ra">5.0</b></div></div>
+<div class="card" style="margin-top:13px"><h2>10각형 프로필</h2><div class="chart"><canvas id="radar"></canvas></div></div>
+<div class="grid"><div class="card"><h3>항목별 점수</h3><div class="summary" id="sum"></div></div><div class="card"><h3>종합 분석</h3><label class="field">강점<textarea id="strength"></textarea></label><label class="field">개선점<textarea id="improve"></textarea></label><label class="field">코치 코멘트<textarea id="comment"></textarea></label></div></div>
+<div class="card"><div class="actions"><button class="btn" onclick="window.print()">PDF·인쇄</button><button class="btn alt" id="reset">전체 초기화</button></div></div></section>
 </main>
-<div class="footer">회원가입 없는 로컬 저장 버전 · 브라우저 데이터 삭제 시 기록도 삭제될 수 있으므로 백업 내보내기를 권장합니다.</div>
-</div>
-
-<dialog id="detailDialog"><div class="dialog-body"><div id="detailContent"></div><div class="btnrow"><button class="btn ghost" onclick="document.getElementById('detailDialog').close()">닫기</button></div></div></dialog>
-
 <script>
-const NTRP_DATA=[
-["1.0","입문 시작",["라켓의 기본 그립과 준비자세를 배우는 단계다.","공의 바운드와 타점을 맞추는 것이 아직 어렵다.","가까이서 넣어주는 공도 연속해서 맞히기 어렵다.","포핸드와 백핸드의 차이를 막 배우고 있다.","서브 동작을 단계별로 익히는 중이다.","테니스 점수와 기본 규칙이 익숙하지 않다."]],
-["1.5","초기 경험",["느린 공을 포핸드로 몇 차례 넘길 수 있다.","백핸드 타점이 아직 불안하다.","랠리가 대부분 2~3회 안에 끝난다.","공을 친 뒤 준비자세로 돌아오는 습관이 부족하다.","오버핸드 서브 성공률이 매우 낮다.","좌우로 움직이면 준비가 늦어진다."]],
-["2.0","초급",["편한 위치의 느린 공은 코트 안에 보낼 수 있다.","움직이면서 치면 타점과 균형이 크게 흔들린다.","방향보다 공을 맞히는 데 집중한다.","오버핸드 서브가 일정하지 않다.","네트 근처에서 라켓 면 유지가 어렵다.","복식 기본 위치가 자주 헷갈린다."]],
-["2.5","초급 발전",["느린 랠리를 4~6회 이어갈 수 있다.","포핸드 방향을 어느 정도 조절한다.","백핸드는 안전한 연결 위주다.","짧은 공과 깊은 공을 구분하기 시작했다.","오버핸드 서브로 게임을 시작할 수 있다.","쉬운 발리는 처리할 수 있다.","빈 공간으로 보내려는 시도가 있다."]],
-["3.0","초중급",["중간 속도의 편한 공은 비교적 안정적으로 넘긴다.","포핸드 랠리는 가능하나 깊이와 방향이 일정하지 않다.","백핸드는 공격보다 연결 위주다.","움직임이 많아지면 정확도가 떨어진다.","기본 포발리와 백발리를 경기에서 시도한다.","복식 기본 전후 위치를 이해한다.","한 세트를 큰 체력 저하 없이 마친다."]],
-["3.5","중급 진입",["크로스와 다운더라인을 구분해 칠 수 있다.","포핸드 스핀 또는 페이스를 조절한다.","백핸드 슬라이스를 실전에서 활용한다.","짧은 공을 인식하고 전진 공격한다.","세컨드 서브를 회전으로 안전하게 넣는다.","쉬운 발리를 빈 공간으로 보낸다.","상대의 약한 쪽을 반복 공략한다."]],
-["4.0","중급",["양쪽 스트로크가 중간 속도 랠리에서 안정적이다.","깊이·스핀·속도를 상황에 따라 바꾼다.","수비에서 중립으로 전환하는 샷이 있다.","짧은 공 공격 후 네트로 연결한다.","서브 코스와 세컨드 서브 회전을 구분한다.","리턴에서 여러 선택을 할 수 있다.","스코어에 따라 공격 위험도를 조절한다."]],
-["4.5","중상급",["포핸드가 포인트를 주도하는 확실한 무기다.","백핸드에서도 방향 전환과 공격이 가능하다.","빠른 공과 강한 스핀 변화에 안정적이다.","짧은 공 공격 후 다음 샷까지 설계한다.","서브 코스·스핀·속도를 전술적으로 조합한다.","리턴으로 서버에게 압박을 준다.","경기 중 상대 전술 변화에 대응한다."]],
-["5.0","상급",["주력 스트로크가 강한 상대에게도 통하는 무기다.","양쪽 스트로크의 깊이와 방향을 높은 확률로 통제한다.","공격·중립·수비 상황을 빠르게 구분한다.","서브와 첫 두 타구를 패턴으로 설계한다.","리턴 게임에 상대별 대응책이 있다.","상대 습관을 경기 초반에 파악한다.","압박 상황에서 의사결정이 안정적이다."]],
-["5.5","최상급 경쟁",["강한 속도와 스핀을 지속하면서 실수율을 관리한다.","상대 공격을 중립 또는 역공으로 전환한다.","코트 모든 구역에서 공격 옵션이 있다.","세컨드 서브도 공격받기 어렵다.","전술 실패 시 대체 패턴을 즉시 적용한다.","상위권 대회에서 반복적으로 경쟁력을 보인다."]],
-["6.0","엘리트",["장기간 전문적이고 체계적인 훈련을 받았다.","국내 정상급 또는 국제 수준 대회 경험이 있다.","모든 기본 기술이 높은 압박에서도 재현된다.","서브와 리턴이 경기 결과를 좌우하는 무기다.","영상·데이터 기반으로 계획을 수립한다.","엘리트 선수와 실질적으로 경쟁한다."]],
-["6.5","투어 진입",["국제 프로 투어 예선 또는 동급 무대에서 경쟁한다.","세계 수준 속도와 스핀에 지속 대응한다.","투어 수준 서브·리턴 득점 구조가 있다.","전문 코칭·피지컬·회복 시스템을 운영한다.","국제 랭킹 획득 가능성이 현실적이다."]],
-["7.0","세계 정상급 프로",["국제 투어 본선에서 지속적으로 경쟁한다.","세계랭킹을 보유하고 투어 성적을 낸다.","모든 기술이 세계 최고 압박에서 작동한다.","테니스가 주된 직업이며 전문팀과 시즌을 운영한다.","주요 프로대회에서 경쟁 가능한 수준이다."]]
-];
-
-const GAGE_DATA=[
-["포핸드 스트로크","FOREHAND"],["백핸드 스트로크","BACKHAND"],["포핸드 발리","FOREHAND VOLLEY"],["백핸드 발리","BACKHAND VOLLEY"],["스매싱","SMASH"],["서브","SERVE"],["커버력","COVERAGE"],["포지셔닝","POSITIONING"],["운영 능력","GAME MANAGEMENT"],["체력","PHYSICAL"]
-];
-
-const state={currentId:null,ntrpAnswers:{},scores:Object.fromEntries(GAGE_DATA.map(x=>[x[0],5])),chart:null};
-const $=id=>document.getElementById(id), today=()=>new Date().toISOString().slice(0,10);
-const getAll=()=>JSON.parse(localStorage.getItem("tengage_records")||"[]");
-const setAll=v=>localStorage.setItem("tengage_records",JSON.stringify(v));
-
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");
- document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
- $(b.dataset.panel).classList.add("active");
- if(b.dataset.panel==="summaryPanel")updateSummary();
- if(b.dataset.panel==="historyPanel")renderHistory();
- window.scrollTo(0,0)
-});
-
-function renderNtrp(){
- $("ntrpContainer").innerHTML=NTRP_DATA.map(([lv,t,qs])=>`
- <div class="level-card">
-   <div class="level-head"><div class="level-badge">${lv}</div><div><b>${t}</b><span>실전에서 반복 가능하면 체크</span></div></div>
-   <div class="checklist">${qs.map((q,i)=>`<label class="check"><input type="checkbox" data-lv="${lv}" data-i="${i}"><span>${q}</span></label>`).join("")}</div>
-   <div class="level-score" id="ls-${lv.replace(".","-")}">0 / ${qs.length}</div>
- </div>`).join("");
- document.querySelectorAll("[data-lv]").forEach(x=>x.onchange=e=>{
-   state.ntrpAnswers[`${e.target.dataset.lv}-${e.target.dataset.i}`]=e.target.checked;
-   calcNtrp();autoDraft()
- });
-}
-
-function calcNtrp(){
- let r="-";
- NTRP_DATA.forEach(([lv,,qs])=>{
-   const y=qs.filter((_,i)=>state.ntrpAnswers[`${lv}-${i}`]).length;
-   $(`ls-${lv.replace(".","-")}`).textContent=`${y} / ${qs.length}`;
-   if(y/qs.length>=.65)r=lv
- });
- $("summaryNtrp").textContent=r;
- return r
-}
-
-function renderGage(){
- $("gageContainer").innerHTML=GAGE_DATA.map(([n,en],i)=>`
- <div class="gage-card">
-   <div class="gage-head"><div><h3>${i+1}. ${n}</h3><small>${en}</small></div><div class="score-number" id="sc-${i}">${state.scores[n]}</div></div>
-   <input class="range" type="range" min="1" max="10" value="${state.scores[n]}" data-score="${i}">
-   <div class="range-labels"><span>1 입문</span><span>5 실전 활용</span><span>10 엘리트</span></div>
- </div>`).join("");
- document.querySelectorAll("[data-score]").forEach(x=>x.oninput=e=>{
-   const i=+e.target.dataset.score,n=GAGE_DATA[i][0];
-   state.scores[n]=+e.target.value;
-   $(`sc-${i}`).textContent=e.target.value;
-   updateSummary();autoDraft()
- });
-}
-
-function updateSummary(){
- const vals=GAGE_DATA.map(x=>+state.scores[x[0]]);
- const total=vals.reduce((a,b)=>a+b,0);
- $("summaryTotal").textContent=total;
- $("summaryAverage").textContent=(total/10).toFixed(1);
- calcNtrp();
- $("scoreSummary").innerHTML=GAGE_DATA.map(([n],i)=>`<div class="summary-item"><span>${n}</span><b>${vals[i]} / 10</b></div>`).join("");
- const rank=GAGE_DATA.map(([n],i)=>({n,s:vals[i]})).sort((a,b)=>b.s-a.s);
- if(!$("strengths").dataset.edit)$("strengths").value=rank.slice(0,3).map(x=>`${x.n} ${x.s}점`).join(", ");
- if(!$("priorities").dataset.edit)$("priorities").value=rank.slice(-3).reverse().map(x=>`${x.n} ${x.s}점`).join(", ");
- if(!state.chart){
-   state.chart=new Chart($("radarChart"),{
-     type:"radar",
-     data:{labels:GAGE_DATA.map(x=>x[0]),datasets:[{label:"TEN GAGE",data:vals,fill:true,borderWidth:2,pointRadius:4}]},
-     options:{responsive:true,scales:{r:{min:0,max:10,ticks:{stepSize:2}}},plugins:{legend:{display:false}}}
-   })
- }else{
-   state.chart.data.datasets[0].data=vals;
-   state.chart.update()
- }
-}
-
-["strengths","priorities"].forEach(id=>$(id).oninput=()=>$(id).dataset.edit="1");
-
-function collect(){
- return{
-   id:state.currentId||crypto.randomUUID(),
-   playerName:$("playerName").value.trim(),
-   date:$("assessmentDate").value||today(),
-   evaluator:$("evaluatorName").value.trim(),
-   handedness:$("handedness").value,
-   birthYear:$("birthYear").value,
-   experience:$("experienceYears").value,
-   ntrp:calcNtrp(),
-   ntrpAnswers:state.ntrpAnswers,
-   scores:state.scores,
-   strengths:$("strengths").value,
-   priorities:$("priorities").value,
-   comment:$("coachComment").value,
-   updatedAt:new Date().toISOString()
- }
-}
-
-function autoDraft(){
- localStorage.setItem("tengage_draft",JSON.stringify(collect()));
- $("saveIndicator").textContent="현재 입력 자동 저장됨"
-}
-
-$("saveProfileBtn").onclick=()=>{
- if(!$("playerName").value.trim())return alert("선수 이름을 입력하세요.");
- autoDraft();alert("선수정보를 저장했습니다.")
-};
-
-$("saveAssessmentBtn").onclick=()=>{
- const r=collect();
- if(!r.playerName)return alert("선수 이름을 입력하세요.");
- const all=getAll(),i=all.findIndex(x=>x.id===r.id);
- if(i>=0)all[i]=r;else all.unshift(r);
- setAll(all);
- state.currentId=r.id;
- $("summarySaveState").textContent="저장됨";
- $("saveIndicator").textContent="평가 저장 완료";
- alert("평가를 저장했습니다.")
-};
-
-$("newAssessmentBtn").onclick=()=>{
- state.currentId=null;
- state.ntrpAnswers={};
- state.scores=Object.fromEntries(GAGE_DATA.map(x=>[x[0],5]));
- $("assessmentDate").value=today();
- $("evaluatorName").value="";
- $("coachComment").value="";
- $("strengths").dataset.edit="";
- $("priorities").dataset.edit="";
- renderNtrp();renderGage();updateSummary();
- $("summarySaveState").textContent="미저장";
- $("saveIndicator").textContent="새 평가"
-};
-
-function renderHistory(){
- const q=$("historySearch").value.trim().toLowerCase();
- const rows=getAll().filter(r=>!q||r.playerName.toLowerCase().includes(q));
- $("historyList").innerHTML=rows.length?rows.map(r=>`
- <div class="history-item">
-   <b>${r.playerName}</b>
-   <div class="meta">${r.date} · NTRP ${r.ntrp} · TEN ${Object.values(r.scores).reduce((a,b)=>a+(+b),0)}/100 · 평가자 ${r.evaluator||"-"}</div>
-   <div class="history-actions">
-     <button class="btn ghost" onclick="viewRecord('${r.id}')">상세보기</button>
-     <button class="btn ghost" onclick="editRecord('${r.id}')">불러오기</button>
-     <button class="btn danger" onclick="deleteRecord('${r.id}')">삭제</button>
-   </div>
- </div>`).join(""):'<div class="notice">저장된 평가가 없습니다.</div>'
-}
-
-$("historySearch").oninput=renderHistory;
-
-window.viewRecord=id=>{
- const r=getAll().find(x=>x.id===id);
- $("detailContent").innerHTML=`
- <h2>${r.playerName}</h2><p>${r.date} · NTRP ${r.ntrp}</p>
- ${GAGE_DATA.map(([n])=>`<div class="summary-item"><span>${n}</span><b>${r.scores[n]}</b></div>`).join("")}
- <h3>강점</h3><p>${r.strengths||"-"}</p>
- <h3>우선순위</h3><p>${r.priorities||"-"}</p>
- <h3>코멘트</h3><p>${r.comment||"-"}</p>`;
- document.getElementById("detailDialog").showModal()
-};
-
-window.editRecord=id=>{
- const r=getAll().find(x=>x.id===id);
- state.currentId=r.id;
- state.ntrpAnswers=r.ntrpAnswers||{};
- state.scores=r.scores||state.scores;
- $("playerName").value=r.playerName;
- $("assessmentDate").value=r.date;
- $("evaluatorName").value=r.evaluator||"";
- $("handedness").value=r.handedness||"";
- $("birthYear").value=r.birthYear||"";
- $("experienceYears").value=r.experience||"";
- $("strengths").value=r.strengths||"";
- $("priorities").value=r.priorities||"";
- $("coachComment").value=r.comment||"";
- renderNtrp();renderGage();
- document.querySelectorAll("[data-lv]").forEach(x=>x.checked=!!state.ntrpAnswers[`${x.dataset.lv}-${x.dataset.i}`]);
- calcNtrp();updateSummary();
- document.querySelector('[data-panel="summaryPanel"]').click()
-};
-
-window.deleteRecord=id=>{
- if(confirm("이 기록을 삭제할까요?")){
-   setAll(getAll().filter(x=>x.id!==id));
-   renderHistory()
- }
-};
-
-$("exportBtn").onclick=()=>{
- const blob=new Blob([JSON.stringify(getAll(),null,2)],{type:"application/json"});
- const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download=`TEN_GAGE_BACKUP_${today()}.json`;
- a.click();
- URL.revokeObjectURL(a.href)
-};
-
-$("assessmentDate").value=today();
-renderNtrp();renderGage();updateSummary();
-
-const draft=JSON.parse(localStorage.getItem("tengage_draft")||"null");
-if(draft){
- $("playerName").value=draft.playerName||"";
- $("evaluatorName").value=draft.evaluator||"";
- $("handedness").value=draft.handedness||"";
- $("birthYear").value=draft.birthYear||"";
- $("experienceYears").value=draft.experience||""
-}
-</script>
-</body>
-</html>
+const NTRP=[["1.0", "입문 시작", ["라켓의 기본 그립과 준비자세를 배우는 단계인가?", "공의 바운드와 타점을 맞추는 것이 아직 어렵나?", "코치가 가까이서 넣어주는 공도 연속해서 맞히기 어려운가?", "포핸드와 백핸드의 차이를 막 배우는 중인가?", "스윙 동작을 생각하지 않으면 자세가 쉽게 무너지는가?", "서브 동작을 단계별로 익히는 중인가?", "테니스 점수 계산과 기본 규칙이 익숙하지 않은가?", "코트 라인의 의미와 기본 위치를 배우는 단계인가?", "실제 게임보다 공 맞히기와 기본 동작 연습이 중심인가?", "발리와 스매싱을 아직 거의 경험하지 않았는가?"]], ["1.5", "초기 경험", ["느린 공을 포핸드로 몇 차례 넘길 수 있는가?", "백핸드에서는 공을 정확히 맞히는 것이 아직 불안한가?", "랠리가 대부분 2~3회 안에 끝나는가?", "공을 치기 전에 준비 자세로 돌아오는 습관이 부족한가?", "서브를 코트 안에 넣는 성공률이 매우 낮은가?", "공이 좌우로 오면 준비가 늦어지는가?", "공의 높이에 따라 스윙을 조절하기 어려운가?", "발리와 스매싱을 경기에서 거의 사용하지 않는가?", "스코어를 직접 세며 짧은 게임을 진행할 수 있는가?", "포인트가 시작되면 기술보다 공을 맞히는 데 집중하는가?"]], ["2.0", "초급", ["포핸드와 백핸드 중 한쪽이 뚜렷하게 더 불안한가?", "편한 위치의 느린 공은 코트 안에 보낼 수 있는가?", "움직이면서 치면 타점과 균형이 크게 흔들리는가?", "공을 넘기는 방향보다 공을 맞히는 데 집중하는가?", "서브를 아래 또는 단순한 동작으로 시작하는 경우가 많은가?", "오버핸드 서브가 아직 일정하지 않은가?", "상대가 친 공의 방향을 늦게 판단하는가?", "네트 근처에서 라켓 면을 유지하기 어려운가?", "복식에서 어디에 서야 하는지 자주 헷갈리는가?", "포인트를 이어가기보다 한 번에 세게 치려다 실수하는 경우가 많은가?"]], ["2.5", "초급 발전", ["비슷한 수준의 상대와 느린 랠리를 4~6회 이어갈 수 있는가?", "포핸드에서 기본 방향을 어느 정도 조절할 수 있는가?", "백핸드는 주로 안전한 연결 위주로 사용하는가?", "짧은 공과 깊은 공을 구분해 움직이기 시작했는가?", "공을 친 뒤 기본 위치로 돌아가려는 습관이 생겼는가?", "오버핸드 서브로 게임을 시작할 수 있는가?", "세컨드 서브가 아직 매우 불안한가?", "쉬운 발리는 처리하지만 빠르거나 낮은 공은 어렵나?", "코트 커버 범위가 좁고 회복 위치가 늦는가?", "복식에서 파트너와 동시에 움직이는 개념을 배우는 중인가?", "상대 코트 빈 공간을 보고 보내려는 시도가 있는가?", "경기 중 공을 안전하게 넘기는 것이 가장 중요한 목표인가?"]], ["3.0", "초중급", ["중간 속도의 편한 공은 비교적 안정적으로 넘길 수 있는가?", "포핸드 랠리는 가능하지만 깊이와 방향이 일정하지 않은가?", "백핸드로 공격하기보다 안전하게 연결하는 편인가?", "움직임이 많아지면 스트로크 정확도가 빠르게 떨어지는가?", "낮은 공과 높은 공에 대한 대응이 일정하지 않은가?", "퍼스트 서브와 세컨드 서브의 차이가 크지 않은가?", "서브 코스를 의도해도 정확도가 낮은가?", "기본 포발리와 백발리를 경기에서 시도할 수 있는가?", "로브가 머리 위로 오면 낙하지점 판단이 늦는가?", "복식에서 기본적인 전후 위치는 이해하는가?", "상대의 약점보다 자신의 실수를 줄이는 데 집중하는가?", "일반적인 한 세트를 큰 체력 저하 없이 마칠 수 있는가?"]], ["3.5", "중급 진입", ["중간 속도에서 크로스와 다운더라인을 구분해 칠 수 있는가?", "포핸드에서 스핀 또는 페이스를 의도적으로 조절하는가?", "백핸드 슬라이스나 안정적인 연결 샷을 실전에서 활용하는가?", "짧은 공을 인식하고 전진해 공격할 수 있는가?", "수비 상황에서 공을 높고 깊게 보내 시간을 벌 수 있는가?", "세컨드 서브를 회전으로 비교적 안전하게 넣을 수 있는가?", "더블폴트를 줄이면서 서브 게임을 운영할 수 있는가?", "쉬운 발리를 빈 공간으로 보낼 수 있는가?", "스매싱을 정면 로브에서 안정적으로 처리하는가?", "상대 타구 후 기본 회복 위치로 돌아가려는 습관이 있는가?", "복식에서 파트너와 좌우 간격을 유지하는가?", "상대의 약한 쪽을 반복 공략하려는 전술을 사용하는가?", "경기 후반에도 기본적인 움직임과 스윙을 유지하는가?"]], ["4.0", "중급", ["포핸드와 백핸드 모두 중간 속도 랠리에서 안정적인가?", "깊이·스핀·속도를 상황에 따라 어느 정도 바꿀 수 있는가?", "수비 상황에서 중립으로 전환하는 샷을 구사할 수 있는가?", "짧은 공을 공격하고 네트로 연결하는 패턴이 있는가?", "상대의 페이스 변화에 즉시 무너지지 않는가?", "퍼스트 서브의 코스와 세컨드 서브의 회전을 구분하는가?", "리턴에서 블록·드라이브·로브를 선택할 수 있는가?", "낮은 발리와 높은 발리를 다른 방식으로 처리하는가?", "스매싱 후 다음 공까지 예상하고 위치를 잡는가?", "코트 밖으로 밀린 후 효율적으로 회복하는가?", "복식에서 전위 압박과 포칭 타이밍을 이해하는가?", "스코어에 따라 공격 위험도를 조절하는가?", "한 경기 동안 샷의 질이 크게 떨어지지 않는가?"]], ["4.5", "중상급", ["포핸드가 포인트를 주도하거나 마무리하는 확실한 무기인가?", "백핸드에서도 방향 전환과 공격이 가능한가?", "빠른 공과 강한 스핀 변화에 안정적으로 대응하는가?", "짧은 공을 높은 확률로 공격하고 다음 샷까지 설계하는가?", "수비에서 역공으로 전환하는 능력이 있는가?", "서브의 코스·스핀·속도를 전술적으로 조합하는가?", "세컨드 서브에서도 상대에게 쉽게 공격권을 주지 않는가?", "리턴 위치와 방식으로 서버에게 압박을 주는가?", "발리로 각도와 깊이를 만들어 포인트를 끝내는가?", "어려운 로브에서도 뒤로 이동해 스매싱할 수 있는가?", "상대의 타점과 자세를 보고 다음 방향을 예측하는가?", "경기 중 상대의 전술 변화에 대응해 패턴을 바꾸는가?", "중요 포인트에서 자신의 주력 패턴을 반복할 수 있는가?", "긴 랠리와 연속 경기에서도 기술 수준을 유지하는가?"]], ["5.0", "상급", ["주력 스트로크가 강한 상대에게도 통하는 확실한 무기인가?", "양쪽 스트로크의 깊이와 방향을 높은 확률로 통제하는가?", "공격·중립·수비 상황을 빠르게 구분해 적절한 샷을 선택하는가?", "상대의 강점을 피하면서 자신의 약점을 보호할 수 있는가?", "빠른 공을 흡수하거나 더 강한 공으로 되돌릴 수 있는가?", "서브와 첫 두 타구를 하나의 패턴으로 설계하는가?", "리턴 게임에서 상대 서브 유형별 명확한 대응책이 있는가?", "네트 전환 시 접근샷의 품질과 첫 발리가 안정적인가?", "빠른 반응 발리와 어려운 스매싱을 실전에서 처리하는가?", "넓은 코트를 커버하고도 다음 샷의 품질을 유지하는가?", "상대의 습관과 포인트 패턴을 경기 초반에 파악하는가?", "브레이크 포인트 등 압박 상황에서 의사결정이 안정적인가?", "경기 흐름이 불리할 때 페이스와 리듬을 바꿀 수 있는가?", "강도 높은 경기에서 체력과 집중력이 함께 유지되는가?"]], ["5.5", "최상급 경쟁", ["강한 속도와 스핀을 지속적으로 생산하면서 실수율을 관리하는가?", "상대의 강한 공격을 중립 또는 역공으로 전환할 수 있는가?", "코트의 모든 구역에서 공격 옵션을 보유하고 있는가?", "서브로 직접 득점하거나 약한 리턴을 유도할 수 있는가?", "세컨드 서브가 압박 상황에서도 공격받기 어려운 수준인가?", "리턴으로 즉시 공격하거나 서버의 패턴을 무력화하는가?", "네트에서 첫 발리와 마무리 발리의 목적이 명확한가?", "예측과 첫 스텝으로 코트 커버 범위를 넓히는가?", "상대별 경기 계획을 세우고 포인트 단위로 실행하는가?", "전술이 실패할 때 대체 패턴을 즉시 적용하는가?", "중요한 순간에도 기술적 루틴과 감정 조절이 안정적인가?", "상위권 대회에서 반복적으로 경쟁력을 보이는가?", "장시간 고강도 경기 후에도 회복력이 뛰어난가?"]], ["6.0", "엘리트", ["전문적이고 장기간의 체계적인 훈련을 받아왔는가?", "국내 정상급 또는 국제 수준 대회에서 경쟁 경험이 있는가?", "모든 기본 기술이 높은 속도와 압박에서도 재현되는가?", "서브와 리턴이 경기 결과를 좌우하는 핵심 무기인가?", "상대와 코트 조건에 따라 전술을 세밀하게 조정하는가?", "영상·데이터·코칭을 기반으로 경기 계획을 수립하는가?", "장시간 경기와 다경기 일정에 대응하는 체력 관리가 가능한가?", "기술적 약점이 일반 경쟁자에게 쉽게 노출되지 않는가?", "경기 중 미세한 전술 변화를 스스로 판단할 수 있는가?", "엘리트 선수들과의 경기에서 실질적인 경쟁력이 있는가?"]], ["6.5", "투어 진입 수준", ["국제 프로 투어 예선 또는 이에 준하는 무대에서 경쟁하는가?", "세계 수준 선수의 속도와 스핀에 지속적으로 대응할 수 있는가?", "서브와 리턴에서 투어 수준의 득점 구조를 갖고 있는가?", "모든 코트 표면과 경기 조건에 빠르게 적응하는가?", "전문 코칭·피지컬·회복 시스템을 일상적으로 운영하는가?", "국제 랭킹 획득 또는 투어 진입 가능성이 현실적인가?", "압박과 관중 환경에서도 경기 루틴이 흔들리지 않는가?", "경기력의 작은 차이를 데이터와 훈련으로 개선하는 단계인가?"]], ["7.0", "세계 정상급 프로", ["국제 투어 본선에서 지속적으로 경쟁하는 프로 선수인가?", "세계랭킹을 보유하고 투어 성적을 내고 있는가?", "모든 기술이 세계 최고 수준의 속도와 압박에서 작동하는가?", "서브·리턴·랠리·네트 플레이가 완성된 경기 체계를 이루는가?", "상대와 코트에 따라 세부 전술을 최고 수준으로 조정하는가?", "그랜드슬램 또는 주요 프로대회 무대에서 경쟁 가능한가?", "테니스가 주된 직업이며 전문팀과 시즌을 운영하는가?", "세계 수준 선수들을 상대로 승리할 실질적인 경쟁력이 있는가?"]]], GAGE=[["포핸드 스트로크", "FOREHAND STROKE", ["중간 속도의 공을 크로스와 다운더라인으로 의도해 보낼 수 있다.", "깊이·스핀·속도를 상황에 맞게 조절할 수 있다.", "이동 중에도 타점과 밸런스를 유지한다.", "짧은 공을 인식하고 공격으로 전환한다.", "수비 상황에서 높고 깊은 공으로 시간을 번다.", "상대의 빠른 공을 흡수하거나 역공으로 전환한다.", "중요한 포인트에서도 주력 패턴을 반복한다.", "경기 후반에도 포핸드 품질이 크게 떨어지지 않는다."]], ["백핸드 스트로크", "BACKHAND STROKE", ["백핸드 쪽 연속 공격에도 랠리를 유지한다.", "탑스핀·드라이브·슬라이스를 상황에 맞게 선택한다.", "높은 공·낮은 공·빠른 공에 대응한다.", "크로스와 다운더라인을 구분해 사용한다.", "수비용 슬라이스로 시간을 벌거나 리듬을 바꾼다.", "백핸드로 방향 전환 또는 공격이 가능하다.", "압박을 받아도 타점과 라켓 면이 크게 흔들리지 않는다.", "상대가 백핸드를 집중 공략해도 경기 운영이 무너지지 않는다."]], ["포핸드 발리", "FOREHAND VOLLEY", ["라켓 면을 안정적으로 유지한다.", "높은 발리와 낮은 발리를 구분해 처리한다.", "몸쪽 빠른 공에 반응할 수 있다.", "각도 발리와 깊은 발리를 구분해 사용한다.", "첫 발리 후 다음 위치로 빠르게 회복한다.", "접근샷 이후 네트에서 포인트를 마무리한다.", "복식에서 포칭 타이밍을 읽고 실행한다.", "압박 상황에서도 불필요한 큰 스윙을 하지 않는다."]], ["백핸드 발리", "BACKHAND VOLLEY", ["백발리 시 라켓 면이 흔들리지 않는다.", "낮은 공과 몸쪽 공을 안정적으로 처리한다.", "한 손 또는 양손 사용이 상황에 맞게 정리되어 있다.", "각도와 깊이를 의도적으로 조절한다.", "반응 발리에서도 공을 코트 안에 통제한다.", "첫 발리 후 네트 포지션을 개선한다.", "복식에서 백핸드 쪽 패싱을 효과적으로 차단한다.", "중요한 포인트에서도 백발리를 회피하지 않는다."]], ["스매싱", "OVERHEAD SMASH", ["로브의 방향과 낙하지점을 빠르게 판단한다.", "사이드스텝과 크로스오버로 안전하게 뒤로 이동한다.", "타점 아래에 들어가 균형 있게 친다.", "각도와 깊이를 선택해 마무리한다.", "뒤로 밀린 상황에서도 코트 안에 통제한다.", "스매싱 후 다음 공을 대비해 회복한다.", "햇빛·바람·높은 로브 등 변수에 대응한다.", "중요 포인트에서 스매싱 실수를 최소화한다."]], ["서브", "SERVE", ["퍼스트와 세컨드 서브의 목적이 명확하다.", "듀스·애드 코트에서 코스를 의도적으로 선택한다.", "플랫·슬라이스·킥 등 구질을 구분해 사용한다.", "세컨드 서브가 상대에게 쉽게 공격받지 않는다.", "중요 포인트에서 더블폴트를 통제한다.", "서브 후 첫 타구까지 패턴으로 설계한다.", "상대 리턴 위치에 따라 서브 전략을 바꾼다.", "경기 후반에도 서브 속도와 회전을 유지한다."]], ["커버력", "COURT COVERAGE", ["상대 타구 직후 첫 스텝이 빠르다.", "좌우 방향 전환 시 균형을 잃지 않는다.", "짧은 공과 로브에 대한 전후 이동이 빠르다.", "코트 밖으로 밀린 뒤 효율적으로 복귀한다.", "수비 중에도 다음 샷의 품질을 유지한다.", "상대 타점과 자세를 보고 방향을 예측한다.", "복식에서 파트너의 빈 공간을 적절히 보완한다.", "긴 랠리에서도 커버 속도가 크게 떨어지지 않는다."]], ["포지셔닝", "POSITIONING", ["상대 위치와 타점에 따라 기본 위치를 조정한다.", "공격·중립·수비 상황에 맞는 위치를 선택한다.", "상대가 칠 수 있는 각도를 줄이는 위치를 선점한다.", "복식에서 파트너와 적절한 간격을 유지한다.", "두 선수가 함께 전후좌우로 움직인다.", "네트 접근 후 과도하게 붙거나 뒤처지지 않는다.", "로브와 패싱 모두를 고려한 균형 위치를 잡는다.", "포인트 종료 후 다음 포인트의 시작 위치와 루틴을 빠르게 정리한다."]], ["운영 능력", "GAME MANAGEMENT", ["상대의 약점과 반복 패턴을 경기 중 파악한다.", "스코어에 따라 공격 위험도를 조절한다.", "자신의 강점을 살리는 2~3구 패턴이 있다.", "상대 서브와 리턴 유형별 대응책이 있다.", "플랜 A가 통하지 않을 때 대체 전술을 적용한다.", "경기 흐름이 불리할 때 속도·높이·리듬을 바꾼다.", "중요 포인트에서 확률 높은 선택을 한다.", "감정에 휘둘리지 않고 경기 계획을 유지한다."]], ["체력", "PHYSICAL CAPACITY", ["한 경기 동안 스윙 속도와 풋워크를 유지한다.", "긴 랠리 후 다음 포인트에서 호흡을 회복한다.", "경기 후반에도 하체 자세가 무너지지 않는다.", "연속 경기에서도 움직임과 집중력이 유지된다.", "빠른 방향 전환을 반복해도 밸런스를 유지한다.", "서브 동작의 속도와 높이가 경기 후반에도 유지된다.", "부상 위험 없이 경기 강도를 감당한다.", "경기 후 회복 속도가 다음 일정에 지장을 주지 않는다."]]];
+const S={n:{},g:{},scores:Object.fromEntries(GAGE.map(x=>[x[0],5])),chart:null};
+const $=x=>document.getElementById(x); $("date").value=new Date().toISOString().slice(0,10);
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===b.dataset.p));if(b.dataset.p==="result")update()});
+function renderN(){ $("ntrpList").innerHTML=NTRP.map(([lv,t,qs])=>`<div class="level"><div class="lh"><div class="badge">${lv}</div><div><b>${t}</b><span>실전 반복 가능하면 체크</span></div></div><div class="checks">${qs.map((q,i)=>`<label class="check"><input type="checkbox" data-l="${lv}" data-i="${i}"><span>${q}</span></label>`).join("")}</div><div class="count" id="c-${lv.replace(".","-")}">0 / ${qs.length}</div></div>`).join("");document.querySelectorAll("[data-l]").forEach(x=>x.onchange=e=>{S.n[`${e.target.dataset.l}-${e.target.dataset.i}`]=e.target.checked;calcN()})}
+function calcN(){let r="-";NTRP.forEach(([lv,,qs])=>{let c=qs.filter((_,i)=>S.n[`${lv}-${i}`]).length;$(`c-${lv.replace(".","-")}`).textContent=`${c} / ${qs.length}`;if(c/qs.length>=.65)r=lv});$("rn").textContent=r;return r}
+function renderG(){ $("gageList").innerHTML=GAGE.map(([n,en,qs],j)=>`<div class="gage"><div class="gh"><div><h3>${j+1}. ${n}</h3><small>${en}</small></div><div class="score" id="s-${j}">5</div></div><div class="checks">${qs.map((q,i)=>`<label class="check"><input type="checkbox" data-g="${j}" data-i="${i}"><span>${q}</span></label>`).join("")}</div><input class="range" type="range" min="1" max="10" value="5" data-r="${j}"></div>`).join("");document.querySelectorAll("[data-r]").forEach(x=>x.oninput=e=>{let j=+e.target.dataset.r,n=GAGE[j][0];S.scores[n]=+e.target.value;$(`s-${j}`).textContent=e.target.value;update()})}
+function update(){calcN();let vals=GAGE.map(x=>S.scores[x[0]]),tot=vals.reduce((a,b)=>a+b,0);$("rt").textContent=tot;$("ra").textContent=(tot/10).toFixed(1);$("sum").innerHTML=GAGE.map(([n],i)=>`<div class="item"><span>${n}</span><b>${vals[i]} / 10</b></div>`).join("");let rank=GAGE.map(([n],i)=>({n,s:vals[i]})).sort((a,b)=>b.s-a.s);if(!$("strength").dataset.ed)$("strength").value=rank.slice(0,3).map(x=>`${x.n} ${x.s}점`).join(", ");if(!$("improve").dataset.ed)$("improve").value=rank.slice(-3).reverse().map(x=>`${x.n} ${x.s}점`).join(", ");if(!S.chart)S.chart=new Chart($("radar"),{type:"radar",data:{labels:GAGE.map(x=>x[0]),datasets:[{data:vals,fill:true,borderWidth:2,pointRadius:4}]},options:{scales:{r:{min:0,max:10,ticks:{stepSize:2}}},plugins:{legend:{display:false}}}});else{S.chart.data.datasets[0].data=vals;S.chart.update()}}
+$("strength").oninput=()=> $("strength").dataset.ed=1;$("improve").oninput=()=> $("improve").dataset.ed=1;
+$("reset").onclick=()=>{if(confirm("모든 입력을 초기화할까요?"))location.reload()}
+renderN();renderG();update();
+</script></body></html>
